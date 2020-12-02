@@ -21,7 +21,7 @@ class genSTLImages():
 
     # this function looks for a folder and creates it if needed
     def checkForFolderHere(self, path):
-        if not os.path.exists(newFolder):
+        if not os.path.exists(path):
             try:
                 os.mkdir(path) # create the folder if it isn't there
                 return True
@@ -37,13 +37,13 @@ class genSTLImages():
             for f in os.listdir(path):
                 if not f.endswith(".png"):
                     continue
-                os.remove(os.path.join(newFolder, f))
+                os.remove(os.path.join(path, f))
             return True
         except:
             print(sys.exc_info()[0])
             return False
 
-    def generateImages(self, mesh):
+    def generateImages(self, mesh, path):
         axisName = 'w'
         for axis in self.axes:
             if axisName == 'w':
@@ -65,7 +65,7 @@ class genSTLImages():
 
                 # Plot the mesh
                 vtkplotlib.mesh_plot(mesh, color="blue")
-                vtkplotlib.save_fig(os.path.normpath(newFolder + '/_' + axisName + str(x) + '.png'))  #saves the figure as an image
+                vtkplotlib.save_fig(os.path.normpath(path + '/_' + axisName + str(x) + '.png'))  #saves the figure as an image
                 vtkplotlib.figure.close(vtkplotlib.gcf())
 
 # folder to put the images in:
@@ -83,4 +83,4 @@ generator.deleteExistingImages(newFolder) # gets rid of existing images if they 
 
 mesh = Mesh.from_file(stlPath) # Read the STL using numpy-stl
 
-generator.generateImages(mesh)
+generator.generateImages(mesh, newFolder)
